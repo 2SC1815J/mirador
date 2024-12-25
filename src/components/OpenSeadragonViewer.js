@@ -28,7 +28,6 @@ export class OpenSeadragonViewer extends Component {
     this.onCanvasMouseMove = debounce(this.onCanvasMouseMove.bind(this), 10);
     this.onViewportChange = this.onViewportChange.bind(this);
     this.zoomToWorld = this.zoomToWorld.bind(this);
-    this.osdUpdating = false;
   }
 
   /**
@@ -56,14 +55,7 @@ export class OpenSeadragonViewer extends Component {
 
     this.setState({ viewer });
 
-    // Set a flag when OSD starts animating (so that viewer updates are not used)
-    viewer.addHandler('animation-start', () => {
-      this.osdUpdating = true;
-    });
     viewer.addHandler('animation-finish', this.onViewportChange);
-    viewer.addHandler('animation-finish', () => {
-      this.osdUpdating = false;
-    });
 
     if (viewer.innerTracker) {
       viewer.innerTracker.moveHandler = this.onCanvasMouseMove;
@@ -86,6 +78,7 @@ export class OpenSeadragonViewer extends Component {
 
     if (prevState.viewer === undefined) {
       if (viewerConfig) {
+        viewerConfig.zoom = viewerConfig.zoom || viewer.viewport.imageToViewportZoom(1);
         viewer.viewport.panTo(viewerConfig, true);
         viewer.viewport.zoomTo(viewerConfig.zoom, viewerConfig, true);
         viewerConfig.degrees !== undefined && viewer.viewport.setRotation(viewerConfig.degrees);
@@ -102,10 +95,16 @@ export class OpenSeadragonViewer extends Component {
     ) {
       viewer.close();
       const canvasesChanged = !(isEqual(canvasWorld.canvasIds, prevProps.canvasWorld.canvasIds));
-      this.addAllImageSources((canvasesChanged || !viewerConfig));
+      if (canvasesChanged && viewer.preserveViewport) {
+        // Do not reset the zoom after add
+        this.addAllImageSources(false);
+      } else {
+        // Reset the zoom if the canvas has changed or if there is no viewerConfig
+        this.addAllImageSources((canvasesChanged || !viewerConfig));
+      }
     } else if (!isEqual(canvasWorld.layers, prevProps.canvasWorld.layers)) {
       this.refreshTileProperties();
-    } else if (viewerConfig && !this.osdUpdating) {
+    } else if (viewerConfig !== prevProps.viewerConfig) {
       const { viewport } = viewer;
 
       if (viewerConfig.x !== viewport.centerSpringX.target.value
