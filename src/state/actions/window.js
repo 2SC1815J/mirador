@@ -259,7 +259,7 @@ export function setWindowMuted(windowId, muted) {
 export function setWindowTextTrackDisabled(windowId, disabled) {
   return ((dispatch) => {
     dispatch({
-      textTrackDisabled: (disabled === undefined) ? true : disabled,
+      textTrackDisabled: (disabled === undefined) ? false : disabled,
       type: ActionTypes.SET_VIDEO_TEXTTRACK_DISABLED,
       windowId,
     });

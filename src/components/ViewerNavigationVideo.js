@@ -121,5 +121,5 @@ ViewerNavigationVideo.defaultProps = {
   setPaused: () => {},
   setSeekTo: () => {},
   setTextTrackDisabled: () => {},
-  textTrackDisabled: true,
+  textTrackDisabled: false,
 };

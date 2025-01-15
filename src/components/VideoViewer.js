@@ -201,6 +201,6 @@ VideoViewer.defaultProps = {
   setCurrentTime: () => {},
   setHasTextTrack: () => {},
   setPaused: () => {},
-  textTrackDisabled: true,
+  textTrackDisabled: false,
   videoOptions: {},
 };
