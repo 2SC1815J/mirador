@@ -72,7 +72,7 @@ export class AnnotationsOverlayVideo extends Component {
     this.onCanvasExit = this.onCanvasExit.bind(this);
 
     this.onVideoTimeUpdate = this.onVideoTimeUpdate.bind(this);
-    this.onVideoLoadedMetadata = this.onVideoLoadedMetadata.bind(this);
+    this.onVideoLoadedData = this.onVideoLoadedData.bind(this);
     this.onVideoWaiting = this.onVideoWaiting.bind(this);
     this.onVideoPlaying = this.onVideoPlaying.bind(this);
 
@@ -99,6 +99,10 @@ export class AnnotationsOverlayVideo extends Component {
    */
   componentDidMount() {
     this.initializeViewer();
+    if (this.video) {
+      this.video.load();
+      this.video.pause();
+    }
   }
 
   /** */
@@ -243,7 +247,7 @@ export class AnnotationsOverlayVideo extends Component {
     }
     if (this.video) {
       this.video.removeEventListener('timeupdate', this.onVideoTimeUpdate);
-      this.video.removeEventListener('loadedmetadata', this.onVideoLoadedMetadata);
+      this.video.removeEventListener('loadeddata', this.onVideoLoadedData);
       this.video.removeEventListener('waiting', this.onVideoWaiting);
       this.video.removeEventListener('playing', this.onVideoPlaying);
       this.video.removeEventListener('seeked', this.onVideoPlaying);
@@ -261,7 +265,7 @@ export class AnnotationsOverlayVideo extends Component {
   }
 
   /** */
-  onVideoLoadedMetadata(event) {
+  onVideoLoadedData(event) {
     if (this.video) {
       const { currentTime } = this.props;
       const { temporalOffset } = this;
@@ -438,13 +442,13 @@ export class AnnotationsOverlayVideo extends Component {
   seekTo(seekTo, resume) {
     const { setCurrentTime, setPaused } = this.props;
     setPaused(true);
-    setCurrentTime(seekTo);
     this.video.addEventListener('seeked', function seeked(event) {
       event.currentTarget.removeEventListener(event.type, seeked);
       if (resume) {
         setPaused(false);
       }
     });
+    setCurrentTime(seekTo);
   }
 
   /** @private */
@@ -469,7 +473,7 @@ export class AnnotationsOverlayVideo extends Component {
     if (!videoRef.current) return;
     this.video = videoRef.current;
     this.video.addEventListener('timeupdate', this.onVideoTimeUpdate);
-    this.video.addEventListener('loadedmetadata', this.onVideoLoadedMetadata);
+    this.video.addEventListener('loadeddata', this.onVideoLoadedData);
     this.video.addEventListener('waiting', this.onVideoWaiting);
     this.video.addEventListener('playing', this.onVideoPlaying);
     this.video.addEventListener('seeked', this.onVideoPlaying);
