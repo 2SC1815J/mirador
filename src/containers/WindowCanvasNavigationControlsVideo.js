@@ -36,7 +36,6 @@ const styles = theme => ({
   controls: {
     backgroundColor: fade(theme.palette.background.paper, 0.5),
     bottom: 0,
-    position: 'absolute',
     width: '100%',
     zIndex: 50,
   },

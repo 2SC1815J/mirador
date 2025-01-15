@@ -69,7 +69,7 @@ export class ViewerNavigationVideo extends Component {
         </MiradorMenuButton>
         {slider}
         <span className={classes.timeLabel}>
-          <Typography variant="caption">
+          <Typography variant="caption" className={classes.durationLabel}>
             {durationLabel}
           </Typography>
         </span>
@@ -89,7 +89,6 @@ export class ViewerNavigationVideo extends Component {
             { textTrackDisabled ? <ClosedCaptionOutlined /> : <ClosedCaption /> }
           </MiradorMenuButton>
         )}
-        <span className={classes.divider} />
       </div>
     );
   }

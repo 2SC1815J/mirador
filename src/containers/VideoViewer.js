@@ -43,17 +43,19 @@ const styles = () => ({
     width: '100%',
   },
   flexFill: {
+    display: 'flex',
+    flexDirection: 'column',
     height: '100%',
-    position: 'relative',
+    position: 'relative', // required for ResizeObserver for AnnotationsOverlayVideo canvas
     width: '100%',
   },
   video: {
-    height: '100%',
+    flexGrow: 1,
+    height: '100px', // must be specified (any fixed value will do)
     maxHeight: '100%',
     maxWidth: '100%',
-    'object-fit': 'contain', // 'scale-down',
-    'object-position': 'left top',
-    width: '100%',
+    objectFit: 'contain',
+    objectPosition: 'left top',
   },
 });
 

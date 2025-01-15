@@ -46,6 +46,9 @@ const styles = {
     height: '24px',
     margin: '12px 6px',
   },
+  durationLabel: {
+    lineHeight: 'normal',
+  },
   ListItem: {
     paddingBottom: 0,
     paddingTop: 0,
@@ -53,14 +56,17 @@ const styles = {
   play_controls: {
     display: 'flex',
     flexDirection: 'row',
+    flexGrow: 1,
     justifyContent: 'center',
   },
   sliderDiv: {
     alignItems: 'center',
     display: 'flex',
+    flexBasis: '200px',
+    flexGrow: 1,
+    minWidth: '50px',
     paddingLeft: '10px',
     paddingRight: '15px',
-    width: '200px',
   },
   timeLabel: {
     alignItems: 'center',
